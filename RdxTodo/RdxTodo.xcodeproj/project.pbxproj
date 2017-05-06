@@ -8,22 +8,36 @@
 
 /* Begin PBXBuildFile section */
 		975FAB611E9172F3009E82DA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 975FAB601E9172F3009E82DA /* AppDelegate.swift */; };
-		975FAB631E9172F3009E82DA /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 975FAB621E9172F3009E82DA /* MainViewController.swift */; };
 		975FAB681E9172F3009E82DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 975FAB671E9172F3009E82DA /* Assets.xcassets */; };
 		975FAB6B1E9172F3009E82DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 975FAB691E9172F3009E82DA /* LaunchScreen.storyboard */; };
 		975FAB741E917AF4009E82DA /* StackViews.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 975FAB731E917AF4009E82DA /* StackViews.framework */; };
 		975FAB781E9181B7009E82DA /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 975FAB751E917B04009E82DA /* RxSwift.framework */; };
+		AD8C83EA60E008568C93D0BC /* TodoItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8C85F74C0ABC36E753F381 /* TodoItemCell.swift */; };
+		AD8C84842FD405B4D2FB57C1 /* Filter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8C831CE517670EC89798A7 /* Filter.swift */; };
+		AD8C86B6D0D72A651611A410 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8C8F9A0FFF73DB2909AB1A /* Store.swift */; };
+		AD8C881828DA4DBF23E4C763 /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8C8016EF3C526F3D980BF8 /* AddItemViewController.swift */; };
+		AD8C88F2908DDE15BD6C0095 /* TodoItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8C8F673E47DA2B90103C37 /* TodoItem.swift */; };
+		AD8C8AA6B04D51A2364163E8 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8C86A3EBD4C9C569B5BC43 /* TodoListViewController.swift */; };
+		AD8C8B5233E5904207BF9708 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8C81CA6D40EBD9FAE6D550 /* MainViewController.swift */; };
+		AD8C8F568056A120612AB8A2 /* RxSwiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD8C8E8E62EDD86AD35F45DE /* RxSwiftExtensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		975FAB5D1E9172F3009E82DA /* RdxTodo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RdxTodo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		975FAB601E9172F3009E82DA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		975FAB621E9172F3009E82DA /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		975FAB671E9172F3009E82DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		975FAB6A1E9172F3009E82DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		975FAB6C1E9172F3009E82DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		975FAB731E917AF4009E82DA /* StackViews.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StackViews.framework; path = Carthage/Build/iOS/StackViews.framework; sourceTree = "<group>"; };
 		975FAB751E917B04009E82DA /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		AD8C8016EF3C526F3D980BF8 /* AddItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
+		AD8C81CA6D40EBD9FAE6D550 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		AD8C831CE517670EC89798A7 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
+		AD8C85F74C0ABC36E753F381 /* TodoItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoItemCell.swift; sourceTree = "<group>"; };
+		AD8C86A3EBD4C9C569B5BC43 /* TodoListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
+		AD8C8E8E62EDD86AD35F45DE /* RxSwiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxSwiftExtensions.swift; sourceTree = "<group>"; };
+		AD8C8F673E47DA2B90103C37 /* TodoItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
+		AD8C8F9A0FFF73DB2909AB1A /* Store.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,10 +74,13 @@
 			isa = PBXGroup;
 			children = (
 				975FAB601E9172F3009E82DA /* AppDelegate.swift */,
-				975FAB621E9172F3009E82DA /* MainViewController.swift */,
 				975FAB671E9172F3009E82DA /* Assets.xcassets */,
 				975FAB691E9172F3009E82DA /* LaunchScreen.storyboard */,
 				975FAB6C1E9172F3009E82DA /* Info.plist */,
+				AD8C8BFB85545EEF57FC2B65 /* Models */,
+				AD8C88DB09E8FE228175B8EE /* Views */,
+				AD8C8A6DAA13537BF4F2A007 /* Store */,
+				AD8C8ABA43773E83C89ECB17 /* Utils */,
 			);
 			path = RdxTodo;
 			sourceTree = "<group>";
@@ -75,6 +92,42 @@
 				975FAB731E917AF4009E82DA /* StackViews.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AD8C88DB09E8FE228175B8EE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AD8C81CA6D40EBD9FAE6D550 /* MainViewController.swift */,
+				AD8C86A3EBD4C9C569B5BC43 /* TodoListViewController.swift */,
+				AD8C85F74C0ABC36E753F381 /* TodoItemCell.swift */,
+				AD8C8016EF3C526F3D980BF8 /* AddItemViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		AD8C8A6DAA13537BF4F2A007 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				AD8C8F9A0FFF73DB2909AB1A /* Store.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		AD8C8ABA43773E83C89ECB17 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				AD8C8E8E62EDD86AD35F45DE /* RxSwiftExtensions.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		AD8C8BFB85545EEF57FC2B65 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AD8C831CE517670EC89798A7 /* Filter.swift */,
+				AD8C8F673E47DA2B90103C37 /* TodoItem.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,6 +206,7 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/StackViews.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FontAwesome.framework",
 			);
 			outputPaths = (
 			);
@@ -167,8 +221,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				975FAB631E9172F3009E82DA /* MainViewController.swift in Sources */,
 				975FAB611E9172F3009E82DA /* AppDelegate.swift in Sources */,
+				AD8C84842FD405B4D2FB57C1 /* Filter.swift in Sources */,
+				AD8C88F2908DDE15BD6C0095 /* TodoItem.swift in Sources */,
+				AD8C8B5233E5904207BF9708 /* MainViewController.swift in Sources */,
+				AD8C8AA6B04D51A2364163E8 /* TodoListViewController.swift in Sources */,
+				AD8C86B6D0D72A651611A410 /* Store.swift in Sources */,
+				AD8C8F568056A120612AB8A2 /* RxSwiftExtensions.swift in Sources */,
+				AD8C83EA60E008568C93D0BC /* TodoItemCell.swift in Sources */,
+				AD8C881828DA4DBF23E4C763 /* AddItemViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
