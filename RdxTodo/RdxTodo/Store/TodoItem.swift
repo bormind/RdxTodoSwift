@@ -6,11 +6,11 @@
 import Foundation
 
 struct TodoItem: Equatable {
-    let id: Int
+    let id: ID
     let todoText: String
     var isCompleted = false
 
-    init(id: Int, todoText: String) {
+    init(id: ID, todoText: String) {
         self.id = id
         self.todoText = todoText
     }

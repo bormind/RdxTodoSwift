@@ -35,7 +35,7 @@ class TodoItemCell: UITableViewCell {
         deleteButton.addTarget(self, action: #selector(onDeleteItem), for: .touchUpInside)
         arrangeControls()
 
-
+        updateUI(self.todoItem)
     }
 
     private func arrangeControls() {
@@ -51,13 +51,13 @@ class TodoItemCell: UITableViewCell {
 
     func onCompleteTodoItem() {
         if let item = todoItem {
-            gStore.dispatch(action: .markAsCompleted(item.id, !item.isCompleted))
+            gStore.dispatch(action: Action(.markAsCompleted(item.id, !item.isCompleted)))
         }
     }
 
     func onDeleteItem() {
         if let item = todoItem {
-            gStore.dispatch(action: .removeItem(item.id))
+            gStore.dispatch(action: Action(.removeItem(item.id)))
         }
     }
 

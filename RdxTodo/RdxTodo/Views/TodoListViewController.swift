@@ -8,7 +8,17 @@ import UIKit
 import StackViews
 import RxSwift
 
-fileprivate let TodoCellId = "TodoCellId"
+fileprivate let TodoItemCellId = "TodoItemCellId"
+
+
+
+fileprivate func filterTitle(_ filterOption: FilterOptions) -> String {
+    switch filterOption {
+    case .showAll: return "All"
+    case .showActive: return "Active"
+    case .showCompleted: return "Completed"
+    }
+}
 
 fileprivate func isVisible(_ filterOption: FilterOptions)
     -> (TodoItem)
@@ -16,12 +26,12 @@ fileprivate func isVisible(_ filterOption: FilterOptions)
 
     return { todoItem in
         switch filterOption {
-            case .showAll:
-                return true
-            case .showCompleted:
-                return todoItem.isCompleted
-            case .showActive:
-                return !todoItem.isCompleted
+        case .showAll:
+            return true
+        case .showCompleted:
+            return todoItem.isCompleted
+        case .showActive:
+            return !todoItem.isCompleted
         }
     }
 }
@@ -30,51 +40,80 @@ class TodoListViewController: UIViewController, UITableViewDataSource, UITableVi
 
     let disposableBag = DisposeBag()
 
-    var todoItems: [TodoItem] = []
+    let segmentCtrl = UISegmentedControl(items: FilterOptions.all.map(filterTitle))
 
     let tableView = UITableView()
+
+    var listId: ID?
+    var itemsToDisplay: [TodoItem] = []
     
     init() {
         super.init(nibName: nil, bundle: nil)
         self.automaticallyAdjustsScrollViewInsets = false
+
+        segmentCtrl.addTarget(self, action: #selector(filterSelected), for: .valueChanged)
 
 //        self.view.addSubview(self.tableView)
 //        insetView(self.tableView, container: self.view, insets: Insets.zero)
 
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.register(TodoItemCell.self, forCellReuseIdentifier: TodoCellId)
+        self.tableView.register(TodoItemCell.self, forCellReuseIdentifier: TodoItemCellId)
 
         self.view.backgroundColor = UIColor.black
 
-        self.todoItems = gStore.state.todoList
+        renderControls()
 
         gStore
-                .changedSubstate({ ($0.todoList, $0.filterOption) }, { $0.0 != $1.0 || $0.1 != $1.1 } )
-                .subscribe(onNext: { [unowned self] in self.updateUI($0.0, $0.1) })
+                .changedSubstate({ $0.selectedList }, { $0 != $1 } )
+                .subscribe(onNext: { [unowned self] in self.updateUI($0) })
                 .addDisposableTo(disposableBag)
 
-        updateUI(gStore.state.todoList, gStore.state.filterOption)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    private func renderControls() {
+        let rootView = stackViews(
+                orientation: .vertical,
+                justify: .fill,
+                align: .fill,
+                insets: Insets(horizontal: 10),
+                spacing: 3,
+                views: [segmentCtrl, tableView],
+                heights: [25, nil]).container
+
+        _ = constrainToGuides(rootView, inViewController: self)
+    }
+
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return todoItems.count
+        return itemsToDisplay.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TodoCellId, for: indexPath) as! TodoItemCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TodoItemCellId, for: indexPath) as! TodoItemCell
         cell.selectionStyle = .none
-        cell.todoItem = todoItems[indexPath.row]
+        cell.todoItem = self.itemsToDisplay[indexPath.row]
         return cell
     }
 
-    private func updateUI(_ todoItems: [TodoItem], _ filterOptions: FilterOptions) {
-        self.todoItems = todoItems.filter(isVisible(filterOptions))
+    private func updateUI(_ list: TodoList) {
+        segmentCtrl.selectedSegmentIndex = FilterOptions.all.index(of:  list.filterOption) ?? 0
+
+        self.listId = list.id
+        self.itemsToDisplay = list.todoItems.filter(isVisible(list.filterOption))
         self.tableView.reloadData()
+    }
+
+    func filterSelected() {
+        guard let listId = self.listId else {
+            return
+        }
+
+        gStore.dispatch(action: Action(listId, .setFilter(FilterOptions.all[segmentCtrl.selectedSegmentIndex])))
     }
     
     
