@@ -1,3 +1,4 @@
 github "ReactiveX/RxSwift" ~> 3.1
+github "RxSwiftCommunity/RxSwiftExt"
 github "bormind/StackViews"
 github "thii/FontAwesome.swift" ~> 1.1

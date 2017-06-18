@@ -5,62 +5,56 @@
 
 import Foundation
 
-enum TodoListsSorting {
-    case byName
-    case byDate
-}
+typealias ListId = UUID
+typealias ListItemId = UUID
+
 
 struct State {
-    var lists: [TodoList] = []
-    var sortBy: TodoListsSorting = .byDate
-    var selectedListId: ID? = nil
+  var listCollection: ListCollectionState = ListCollectionState()
+  var selectedListId: ListId? = nil
 }
 
 extension State {
-    var selectedList: TodoList? {
-        guard let id = self.selectedListId else {
-            return nil
-        }
-
-        return self.lists.first(where: {$0.id == id})
+  var selectedList: TodoListState? {
+    guard let id = self.selectedListId else {
+      return nil
     }
+
+    return self.listCollection.lists.first(where: { $0.listId == id })
+  }
 }
 
 enum Action {
-    case addTodoList(TodoList)
-    case removeTodoList(ID)
-    case setListSort(TodoListsSorting)
-    case changeList(ID, ListAction)
+  case selectList(ListId)
+  case listCollectionAction(ListCollectionAction)
+  case todoListAction(ListId, TodoListAction)
 }
 
 extension Action {
-    init(_ id: ID, _ listAction: ListAction) {
-        self = .changeList(id, listAction)
-    }
+  init(_ id: ListId, _ listAction: TodoListAction) {
+    self = .todoListAction(id, listAction)
+  }
 }
 
 func reducer(_ state: State, action: Action) -> State {
 
-    var state = state
+  var state = state
 
-    func listIndex(_ id: ID) -> Int? {
-        return state.lists.index(where: { $0.id == id })
+  switch action {
+  case .selectList(let listId):
+    state.selectedListId = listId
+  case .listCollectionAction(let listCollectionAction):
+    state.listCollection = listCollectionReducer(state.listCollection, action: listCollectionAction)
+  case .todoListAction(let listId, let action):
+    if let ix = state.listCollection.lists.index(where: { $0.listId == listId }) {
+      state.listCollection.lists[ix] = listReducer(state.listCollection.lists[ix], action: action)
     }
+  }
 
-    switch action {
-    case .addTodoList(let todoList):
-        state.lists.append(todoList)
-    case .removeTodoList(let id):
-        if let ix = listIndex(id) {
-            state.lists.remove(at: ix)
-        }
-    case .setListSort(let sort):
-        state.sortBy = sort
-    case .changeList(let id, let action):
-        if let ix = listIndex(id) {
-            state.lists[ix] = listReducer(state.lists[ix], action: action)
-        }
-    }
-
-    return state
+  return state
 }
+
+
+
+
+

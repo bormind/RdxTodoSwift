@@ -6,11 +6,11 @@
 import Foundation
 
 enum FilterOptions {
-    case showAll, showActive, showCompleted
+  case showAll, showActive, showCompleted
 
-    static var all: [FilterOptions] {
-        return [.showAll, .showActive, .showCompleted]
-    }
+  static var all: [FilterOptions] {
+    return [.showAll, .showActive, .showCompleted]
+  }
 }
 
 

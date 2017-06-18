@@ -1,3 +1,4 @@
-github "thii/FontAwesome.swift" "1.1.2"
-github "ReactiveX/RxSwift" "3.4.1"
+github "ReactiveX/RxSwift" "3.5.0"
+github "RxSwiftCommunity/RxSwiftExt" "2.4.1"
 github "bormind/StackViews" "0.1.0"
+github "thii/FontAwesome.swift" "1.2.0"

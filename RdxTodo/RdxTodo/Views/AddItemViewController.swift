@@ -9,31 +9,31 @@ import StackViews
 
 class AddItemViewController: UIViewController {
 
-    let label = UILabel()
-    let textField = UITextField()
-    let addButton = UIButton()
+  let label = UILabel()
+  let textField = UITextField()
+  let addButton = UIButton()
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
+  init() {
+    super.init(nibName: nil, bundle: nil)
 
-        self.automaticallyAdjustsScrollViewInsets = false
-        self.view.backgroundColor = UIColor.white
+    self.automaticallyAdjustsScrollViewInsets = false
+    self.view.backgroundColor = UIColor.white
 
-        self.label.text = "New ToDo:"
-        self.addButton.setTitle("Add", for: .normal)
+    self.label.text = "New ToDo:"
+    self.addButton.setTitle("Add", for: .normal)
 
-        _ = stackViews(
-                container: self.view,
-                orientation: .horizontal,
-                justify: .fill,
-                align: .center,
-                insets: Insets(horizontal: 5),
-                spacing: 0,
-                views: [label, textField, addButton],
-                widths: [30, nil, 30])
-    }
+    _ = stackViews(
+      container: self.view,
+      orientation: .horizontal,
+      justify: .fill,
+      align: .center,
+      insets: Insets(horizontal: 5),
+      spacing: 0,
+      views: [label, textField, addButton],
+      widths: [30, nil, 30])
+  }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 }
