@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 import StackViews
 
-class AddItemViewController: UIViewController {
+final class AddItemViewController: UIViewController, RdxViewController {
 
   let label = UILabel()
   let textField = UITextField()
@@ -35,5 +35,9 @@ class AddItemViewController: UIViewController {
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  func setupStore(_ store: Store) {
+
   }
 }

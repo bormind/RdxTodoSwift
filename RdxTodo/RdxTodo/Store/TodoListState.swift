@@ -25,7 +25,12 @@ fileprivate func isListItemVisible(_ filterOption: FilterOptions)
 
 struct TodoListState: Equatable {
   var list: TodoList
-  var filterOption: FilterOptions = .showAll
+  var filterOption: FilterOptions
+
+  init(list: TodoList, filterOption: FilterOptions = .showAll) {
+    self.list = list
+    self.filterOption = filterOption
+  }
 }
 
 func ==(lhs: TodoListState, rhs: TodoListState) -> Bool {

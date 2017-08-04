@@ -6,33 +6,34 @@
 import Foundation
 import RxSwift
 
-typealias Reducer = (State, Action) -> State
+typealias Reducer = (AppState, Action) -> AppState
 
 
 class Store {
 
   let reducer: Reducer
 
-  private let observableState: Variable<State>
+  private let observableState: Variable<AppState>
 
   init(reducer: @escaping Reducer) {
     self.reducer = reducer
 
-    self.observableState = Variable(State())
+    self.observableState = Variable(AppState())
   }
 
   func dispatch(_ action: Action) {
     self.observableState.value = self.reducer(self.observableState.value, action)
   }
 
-  var state: Observable<State> {
-    return observableState.asObservable()
+  var state: Observable<AppState> {
+    return observableState
+      .asObservable()
+      .observeOn(MainScheduler.instance)
   }
 
-  var currentState: State {
+  var currentState: AppState {
     return observableState.value
   }
 
 }
 
-let gStore = Store(reducer: reducer)

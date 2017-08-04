@@ -7,7 +7,7 @@ import Foundation
 
 
 enum ListCollectionAction {
-  case addTodoList(TodoListState)
+  case addTodoList(TodoList)
   case removeTodoList(ListId)
   case setListSort(ListsSorting)
   case changeList(ListId, TodoListAction)
@@ -15,11 +15,11 @@ enum ListCollectionAction {
 
 enum ListsSorting {
   case byName
-  case byLastWatched
+  case byLastModified
 }
 
 fileprivate func compareDates(_ lhs: TodoListState, _ rhs: TodoListState) -> Bool {
-  return lhs.list.lastWatched <= rhs.list.lastWatched
+  return lhs.list.lastModified <= rhs.list.lastModified
 }
 
 fileprivate func compareNames(_ lhs: TodoListState, _ rhs: TodoListState) -> Bool {
@@ -28,7 +28,7 @@ fileprivate func compareNames(_ lhs: TodoListState, _ rhs: TodoListState) -> Boo
 
 
 struct ListCollectionState: Equatable {
-  var sortBy: ListsSorting = .byLastWatched
+  var sortBy: ListsSorting = .byLastModified
   var lists: [TodoListState] = []
 }
 
@@ -44,7 +44,7 @@ extension ListCollectionState {
     let compare: (TodoListState, TodoListState) -> Bool
     switch self.sortBy {
       case .byName: compare = compareNames
-      case .byLastWatched: compare = compareDates
+      case .byLastModified: compare = compareDates
     }
 
     return self.lists.sorted(by: compare).map { $0.list }
@@ -62,8 +62,8 @@ func listCollectionReducer(_ state: ListCollectionState, action: ListCollectionA
   var state = state
 
   switch action {
-  case .addTodoList(let todoList):
-    state.lists.append(todoList)
+  case .addTodoList(let list):
+    state.lists.append(TodoListState(list: list))
   case .removeTodoList(let id):
     if let ix = state.listIndex(id) {
       state.lists.remove(at: ix)

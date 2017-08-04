@@ -7,7 +7,7 @@ import Foundation
 import UIKit
 import StackViews
 import RxSwift
-import RxSwiftExt
+
 
 fileprivate let TodoItemCellId = "TodoItemCellId"
 
@@ -25,8 +25,10 @@ protocol TodoItemCellDelegate: class{
   func deleteItem(_ itemId: ListItemId)
 }
 
-class TodoListViewController:  UIViewController,
+class TodoListViewController:  UIViewController, RdxViewController,
   UITableViewDataSource,  UITableViewDelegate, TodoItemCellDelegate {
+
+  var store: Store?
 
   let disposableBag = DisposeBag()
 
@@ -37,7 +39,7 @@ class TodoListViewController:  UIViewController,
   var listId: ListId?
   var itemsToDisplay: [TodoItem] = []
 
-  init() {
+  fileprivate init() {
     super.init(nibName: nil, bundle: nil)
     self.automaticallyAdjustsScrollViewInsets = false
 
@@ -54,18 +56,22 @@ class TodoListViewController:  UIViewController,
 
     renderControls()
 
-    gStore
+  }
+
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  internal func setupStore(_ store: Store) {
+    self.store = store
+
+    store
       .state
       .map {  $0.selectedList  }
       .unwrap()
       .distinctUntilChanged()
       .subscribe(onNext: { [unowned self] data in self.updateUI(data) })
       .addDisposableTo(disposableBag)
-
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   private func renderControls() {
@@ -80,7 +86,6 @@ class TodoListViewController:  UIViewController,
 
     _ = constrainToGuides(rootView, inViewController: self)
   }
-
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return itemsToDisplay.count
@@ -106,7 +111,7 @@ class TodoListViewController:  UIViewController,
       return
     }
 
-    gStore.dispatch(Action(listId, .setFilter(FilterOptions.all[segmentCtrl.selectedSegmentIndex])))
+    self.store?.dispatch(Action(listId, .setFilter(FilterOptions.all[segmentCtrl.selectedSegmentIndex])))
   }
 
   func completeItem(_ itemId: ListItemId, isCompleted: Bool) {
@@ -114,7 +119,7 @@ class TodoListViewController:  UIViewController,
       return
     }
 
-    gStore.dispatch(Action(listId, .markAsCompleted(itemId, isCompleted)))
+    store?.dispatch(Action(listId, .markAsCompleted(itemId, isCompleted)))
   }
 
   func deleteItem(_ itemId: ListItemId) {
@@ -122,8 +127,7 @@ class TodoListViewController:  UIViewController,
       return
     }
 
-    gStore.dispatch(Action(listId, .removeItem(itemId)))
-
+    store?.dispatch(Action(listId, .removeItem(itemId)))
   }
 
 
