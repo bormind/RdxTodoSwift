@@ -11,7 +11,7 @@ class TodoListCell: UITableViewCell {
 
 
   let listNameLabel = UILabel()
-  let lastWatchedTimeLabel = UILabel()
+  let lastModifiedTimeLabel = UILabel()
   let dateFormatter = DateFormatter()
 
   var todoList: TodoList? {
@@ -27,9 +27,14 @@ class TodoListCell: UITableViewCell {
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+    listNameLabel.backgroundColor = UIColor.blue
+    lastModifiedTimeLabel.backgroundColor = UIColor.green
+
+    self.backgroundColor = UIColor.orange
+
     self.dateFormatter.dateFormat = "MMM d, h:mm a"
 
-    [listNameLabel, lastWatchedTimeLabel].enumerated().forEach {
+    [listNameLabel, lastModifiedTimeLabel].enumerated().forEach {
       $1.alignContent(ListCollectionCellStyles.alignments[$0])
     }
 
@@ -43,7 +48,7 @@ class TodoListCell: UITableViewCell {
         left: ListCollectionCellStyles.headerMarginLeft,
         bottom: 0,
         right: ListCollectionCellStyles.headerMarginRight),
-      views: [listNameLabel, lastWatchedTimeLabel],
+      views: [listNameLabel, lastModifiedTimeLabel],
       widths: ListCollectionCellStyles.widths)
 
     updateUI(self.todoList)
@@ -51,9 +56,9 @@ class TodoListCell: UITableViewCell {
 
   private func updateUI(_ todoList: TodoList?) {
     if let todoList = todoList {
-      lastWatchedTimeLabel.text = dateFormatter.string(from: todoList.lastModified)
+      lastModifiedTimeLabel.text = dateFormatter.string(from: todoList.lastModified)
     } else {
-      lastWatchedTimeLabel.text = "Last Watched"
+      lastModifiedTimeLabel.text = "Last Watched"
     }
 
     listNameLabel.text = todoList?.name ?? "List Name"

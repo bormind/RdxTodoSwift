@@ -6,22 +6,6 @@
 import Foundation
 
 
-fileprivate func isListItemVisible(_ filterOption: FilterOptions)
-    -> (TodoItem)
-  -> Bool {
-
-  return { todoItem in
-    switch filterOption {
-    case .showAll:
-      return true
-    case .showCompleted:
-      return todoItem.isCompleted
-    case .showActive:
-      return !todoItem.isCompleted
-    }
-  }
-}
-
 
 struct TodoListState: Equatable {
   var list: TodoList
@@ -79,6 +63,21 @@ func listReducer(_ state: TodoListState, action: TodoListAction) -> TodoListStat
   }
 
   return state
+}
 
+fileprivate func isListItemVisible(_ filterOption: FilterOptions)
+    -> (TodoItem)
+    -> Bool {
+
+  return { todoItem in
+    switch filterOption {
+    case .showAll:
+      return true
+    case .showCompleted:
+      return todoItem.isCompleted
+    case .showActive:
+      return !todoItem.isCompleted
+    }
+  }
 }
 

@@ -37,7 +37,7 @@ final class AddItemViewController: UIViewController, RdxViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setupStore(_ store: Store) {
+  func setup(_ env: Environment) {
 
   }
 }

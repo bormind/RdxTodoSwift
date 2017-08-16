@@ -17,11 +17,7 @@ struct AppState {
 
 extension AppState {
   var selectedList: TodoListState? {
-    guard let id = self.selectedListId else {
-      return nil
-    }
-
-    return self.listCollection.lists.first(where: { $0.listId == id })
+    return self.selectedListId.flatMap { self.listCollection.getList(withId: $0) }
   }
 }
 

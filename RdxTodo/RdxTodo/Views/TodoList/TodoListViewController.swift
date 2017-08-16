@@ -28,7 +28,7 @@ protocol TodoItemCellDelegate: class{
 class TodoListViewController:  UIViewController, RdxViewController,
   UITableViewDataSource,  UITableViewDelegate, TodoItemCellDelegate {
 
-  var store: Store?
+  var env: Environment?
 
   let disposableBag = DisposeBag()
 
@@ -39,7 +39,7 @@ class TodoListViewController:  UIViewController, RdxViewController,
   var listId: ListId?
   var itemsToDisplay: [TodoItem] = []
 
-  fileprivate init() {
+  init() {
     super.init(nibName: nil, bundle: nil)
     self.automaticallyAdjustsScrollViewInsets = false
 
@@ -55,17 +55,16 @@ class TodoListViewController:  UIViewController, RdxViewController,
     self.view.backgroundColor = UIColor.black
 
     renderControls()
-
   }
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
-  internal func setupStore(_ store: Store) {
-    self.store = store
+  internal func setup(_ env: Environment) {
+    self.env = env
 
-    store
+    self.env?.store
       .state
       .map {  $0.selectedList  }
       .unwrap()
@@ -101,33 +100,25 @@ class TodoListViewController:  UIViewController, RdxViewController,
   private func updateUI(_ state: TodoListState) {
     segmentCtrl.selectedSegmentIndex = FilterOptions.all.index(of: state.filterOption) ?? 0
 
+    self.title = state.list.name
     self.listId = state.listId
     self.itemsToDisplay = state.visibleItems()
     self.tableView.reloadData()
   }
 
   func filterSelected() {
-    guard let listId = self.listId else {
-      return
-    }
-
-    self.store?.dispatch(Action(listId, .setFilter(FilterOptions.all[segmentCtrl.selectedSegmentIndex])))
+    guard let listId = self.listId else { return }
+    self.env?.store.dispatch(Action(listId, .setFilter(FilterOptions.all[segmentCtrl.selectedSegmentIndex])))
   }
 
   func completeItem(_ itemId: ListItemId, isCompleted: Bool) {
-    guard let listId = self.listId else {
-      return
-    }
-
-    store?.dispatch(Action(listId, .markAsCompleted(itemId, isCompleted)))
+    guard let listId = self.listId else { return }
+    self.env?.store.dispatch(Action(listId, .markAsCompleted(itemId, isCompleted)))
   }
 
   func deleteItem(_ itemId: ListItemId) {
-    guard let listId = self.listId else {
-      return
-    }
-
-    store?.dispatch(Action(listId, .removeItem(itemId)))
+    guard let listId = self.listId else { return }
+    self.env?.store.dispatch(Action(listId, .removeItem(itemId)))
   }
 
 

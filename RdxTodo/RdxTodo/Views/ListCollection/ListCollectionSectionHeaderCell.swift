@@ -26,7 +26,6 @@ class ListCollectionSectionHeaderCell: UITableViewCell, RdxViewController {
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-
     self.buttonAttributes = [
       (self.listName, "List Name", .byName),
       (self.modifiedDate, "Modified", .byLastModified)
@@ -35,9 +34,9 @@ class ListCollectionSectionHeaderCell: UITableViewCell, RdxViewController {
     buttonAttributes
       .map { $0.0 }
       .enumerated()
-      .forEach {
-        $1.alignContent(ListCollectionCellStyles.alignments[$0])
-        $1.addTarget(self, action: #selector(onButtonClick), for: .touchUpInside)
+      .forEach { i, button in
+        button.alignContent(ListCollectionCellStyles.alignments[i])
+        button.addTarget(self, action: #selector(onButtonClick), for: .touchUpInside)
       }
 
     _ = stackViews(
@@ -49,7 +48,7 @@ class ListCollectionSectionHeaderCell: UITableViewCell, RdxViewController {
         top: 0,
         left: ListCollectionCellStyles.headerMarginLeft,
         bottom: 0,
-        right: ListCollectionCellStyles.headerMarginRight),
+        right: ListCollectionCellStyles.headerMarginRight + 20),
       views:[self.listName, self.modifiedDate],
       widths: ListCollectionCellStyles.widths)
   }
@@ -58,8 +57,8 @@ class ListCollectionSectionHeaderCell: UITableViewCell, RdxViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setupStore(_ store: Store) {
-    self.store = store
+  func setup(_ env: Environment) {
+    self.store = env.store
 
     self.store?
       .state

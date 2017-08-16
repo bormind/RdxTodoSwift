@@ -8,23 +8,27 @@
 
 import UIKit
 
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
   var window: UIWindow?
 
-  let store = Store(reducer: reducer)
+  let env = createApplicationEnvironment()
 
-  func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+  func application(_ application: UIApplication,
+                   didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?)
+      -> Bool {
+
     self.window = UIWindow(frame: UIScreen.main.bounds)
 
     let mainViewController = ListCollectionViewController()
-    mainViewController.setupStore(store)
+    mainViewController.setup(env)
     let nc = UINavigationController(rootViewController: mainViewController)
     self.window!.rootViewController = nc
     self.window!.makeKeyAndVisible()
 
-    self.getInitialData()
+    env.fetcher.fetchLists()
 
     return true
   }
@@ -51,18 +55,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
 
-  private func getInitialData() {
-    Fetcher.fetchLists { result in
-      _ = result
-            .onValue { listsData in
-              listsData
-                .map { TodoList(id: $0.listId, name: $0.listName, lastModified: $0.lastModified) }
-                .forEach { self.store.dispatch(Action(.addTodoList($0))) }
-            }
-            .onError {
-              print("Error fetching Lists: \($0)")
-            }
-    }
-  }
+}
+
+private func createApplicationEnvironment() -> Environment {
+  let store = Store(reducer: reducer)
+  let api = Api()
+  return Environment(store: store, fetcher: Fetcher(api: api, store: store))
 }
 

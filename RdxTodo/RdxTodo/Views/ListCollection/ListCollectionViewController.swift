@@ -15,6 +15,7 @@ fileprivate let TodoListCellId = "TodoListCellId"
 final class ListCollectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
   RdxViewController {
 
+  var env: Environment?
 
   let disposableBag = DisposeBag()
 
@@ -54,21 +55,23 @@ final class ListCollectionViewController: UIViewController, UITableViewDataSourc
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setupStore(_ store: Store) {
-    store
+  func setup(_ env: Environment) {
+
+    self.env = env
+
+    self.env?.store
       .state
       .map { $0.listCollection }
       .distinctUntilChanged()
       .subscribe(onNext: { [unowned self] state in self.updateUI(state) })
       .addDisposableTo(disposableBag)
 
-    newNameVC.setupStore(store)
+    newNameVC.setup(env)
   }
 
   func numberOfSections(in tableView: UITableView) -> Int {
     return 1
   }
-
 
   func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
     return 44
@@ -79,6 +82,10 @@ final class ListCollectionViewController: UIViewController, UITableViewDataSourc
     let cell = tableView.dequeueReusableCell(
       withIdentifier: ListCollectionSectionHeaderCellId) as! ListCollectionSectionHeaderCell
 
+    if let env = self.env {
+      cell.setup(env)
+    }
+
     return cell
   }
 
@@ -86,8 +93,22 @@ final class ListCollectionViewController: UIViewController, UITableViewDataSourc
     return self.sortedLists.count
   }
 
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    guard let env = self.env else { return }
+
+    let selectedList = self.sortedLists[indexPath.row]
+    env.store.dispatch(.selectList(selectedList.id))
+    env.fetcher.fetchListDetails(listId: selectedList.id)
+
+    let vc = TodoListViewController()
+    vc.setup(env)
+
+    self.navigationController?.pushViewController(vc, animated: true)
+  }
+
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: TodoListCellId, for: indexPath) as! TodoListCell
+    cell.accessoryType = .disclosureIndicator
     cell.selectionStyle = .none
     cell.todoList = self.sortedLists[indexPath.row]
     return cell

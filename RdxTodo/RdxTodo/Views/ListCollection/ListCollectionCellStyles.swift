@@ -13,6 +13,6 @@ import UIKit
 struct ListCollectionCellStyles {
   static let headerMarginLeft: CGFloat = 5
   static let headerMarginRight: CGFloat = 0
-  static let widths: [CGFloat?] = [nil, 170]
+  static let widths: [CGFloat?] = [nil, 160]
   static let alignments: [HorizontalAlignment] = [.left, .center]
 }

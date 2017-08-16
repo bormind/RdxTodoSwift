@@ -7,5 +7,5 @@ import Foundation
 import UIKit
 
 protocol RdxViewController {
-  func setupStore(_ store: Store)
+  func setup(_ env: Environment)
 }

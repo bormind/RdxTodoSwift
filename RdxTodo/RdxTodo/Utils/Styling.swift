@@ -15,12 +15,12 @@ enum HorizontalAlignment {
 struct Styling {
   static let titleButtonAttributesSorted: [String: Any] = [
     NSFontAttributeName: UIFont.boldSystemFont(ofSize: 14),
-    NSForegroundColorAttributeName: UIColor.black,
+    NSForegroundColorAttributeName: UIColor.blue,
     NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue]
 
   static let titleButtonAttributesNonSorted: [String: Any] = [
-    NSFontAttributeName: UIFont.boldSystemFont(ofSize: 14),
-    NSForegroundColorAttributeName: UIColor.black,
+    NSFontAttributeName: UIFont.systemFont(ofSize: 14),
+    NSForegroundColorAttributeName: UIColor.blue,
     NSUnderlineStyleAttributeName: NSUnderlineStyle.styleNone.rawValue]
 }
 

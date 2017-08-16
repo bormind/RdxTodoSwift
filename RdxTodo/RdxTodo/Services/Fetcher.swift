@@ -5,20 +5,27 @@
 
 import Foundation
 
-
-//We pretend that we get shallow list data from the API call
-typealias ShallowListData = (listId: ListId, listName: String, lastModified: Date)
-
 struct Fetcher {
+  let api: Api
+  let store: Store
 
-  static func fetchLists(completed: @escaping (FetchResult<[ShallowListData]>)->()) {
-    //simulate async network call
-    DispatchQueue.global(qos: .userInitiated).async {
-      let resultData = SAMPLE_DATA.map { ($0.id, $0.name, $0.lastModified) }
-
-      Thread.sleep(forTimeInterval: 0.5)
-      completed(FetchResult.value(resultData))
+  func fetchLists() {
+    api.fetchLists { result in
+      _ = result
+        .onValue { listsData in
+          listsData
+            .map { TodoList(id: $0.listId, name: $0.listName, lastModified: $0.lastModified) }
+            .forEach { self.store.dispatch(Action(.addOrUpdateTodoList($0))) }
+        }
+        .onError {  print("Error fetching Lists: \($0)")  }
     }
   }
 
+  func fetchListDetails(listId: ListId) {
+    api.fetchTodoList(listId: listId) { result in
+      _ = result
+        .onValue { self.store.dispatch(Action(.addOrUpdateTodoList($0))) }
+        .onError {  print("Error fetching list details: \($0)")  }
+    }
+  }
 }

@@ -48,10 +48,10 @@ final class NewListNameViewController: UIViewController, RdxViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setupStore(_ store: Store) {
-    self.store = store
+  func setup(_ env: Environment) {
+    self.store = env.store
 
-    store.state
+    self.store?.state
       .map { $0.newListState }
       .distinctUntilChanged()
       .subscribe(onNext: { [unowned self] in self.updateUI($0) })
@@ -72,7 +72,7 @@ final class NewListNameViewController: UIViewController, RdxViewController {
     }
 
     let newTodoList = TodoList(name: name)
-    self.store?.dispatch(Action(.addTodoList(newTodoList)))
+    self.store?.dispatch(Action(.addOrUpdateTodoList(newTodoList)))
     self.store?.dispatch(Action(.clearNewListName))
   }
 
