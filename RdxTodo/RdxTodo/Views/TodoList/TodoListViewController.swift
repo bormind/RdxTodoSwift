@@ -26,12 +26,13 @@ protocol TodoItemCellDelegate: class{
 }
 
 class TodoListViewController:  UIViewController, RdxViewController,
-  UITableViewDataSource,  UITableViewDelegate, TodoItemCellDelegate {
+  UITableViewDataSource,  UITableViewDelegate, TodoItemCellDelegate, AddNewItemDelegate {
 
   var env: Environment?
 
   let disposableBag = DisposeBag()
 
+  let newItemNameVC = NewItemNameViewController()
   let segmentCtrl = UISegmentedControl(items: FilterOptions.all.map(filterTitle))
 
   let tableView = UITableView()
@@ -43,16 +44,17 @@ class TodoListViewController:  UIViewController, RdxViewController,
     super.init(nibName: nil, bundle: nil)
     self.automaticallyAdjustsScrollViewInsets = false
 
-    segmentCtrl.addTarget(self, action: #selector(filterSelected), for: .valueChanged)
+    self.view.backgroundColor = UIColor.white
 
-//        self.view.addSubview(self.tableView)
-//        insetView(self.tableView, container: self.view, insets: Insets.zero)
+    self.newItemNameVC.delegate = self
+    self.newItemNameVC.placeholder = "New Entry"
+    self.newItemNameVC.backgroundColor = UIColor.rgb(165, 251, 237)
+
+    self.segmentCtrl.addTarget(self, action: #selector(filterSelected), for: .valueChanged)
 
     self.tableView.delegate = self
     self.tableView.dataSource = self
     self.tableView.register(TodoItemCell.self, forCellReuseIdentifier: TodoItemCellId)
-
-    self.view.backgroundColor = UIColor.black
 
     renderControls()
   }
@@ -71,19 +73,33 @@ class TodoListViewController:  UIViewController, RdxViewController,
       .distinctUntilChanged()
       .subscribe(onNext: { [unowned self] data in self.updateUI(data) })
       .addDisposableTo(disposableBag)
+
+    self.env?.store
+      .state
+      .map { $0.newTodoItemState }
+      .subscribe(onNext: self.newItemNameVC.updateUI)
+      .addDisposableTo(disposableBag)
   }
 
   private func renderControls() {
-    let rootView = stackViews(
+    let tableWithFilter = stackViews(
       orientation: .vertical,
       justify: .fill,
       align: .fill,
-      insets: Insets(horizontal: 10),
+      insets: Insets(horizontal: 3),
       spacing: 3,
       views: [segmentCtrl, tableView],
       heights: [25, nil]).container
 
-    _ = constrainToGuides(rootView, inViewController: self)
+    _ = stackViews(
+      container: self.view,
+      orientation: .vertical,
+      justify: .fill,
+      align: .fill,
+      insets: Insets(top: 63, left: 0, bottom: 0, right: 0),
+      spacing: 3,
+      views: [newItemNameVC.view, tableWithFilter],
+      heights: [35, nil])
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -92,6 +108,7 @@ class TodoListViewController:  UIViewController, RdxViewController,
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: TodoItemCellId, for: indexPath) as! TodoItemCell
+    cell.delegate = self
     cell.selectionStyle = .none
     cell.todoItem = self.itemsToDisplay[indexPath.row]
     return cell
@@ -102,24 +119,35 @@ class TodoListViewController:  UIViewController, RdxViewController,
 
     self.title = state.list.name
     self.listId = state.listId
-    self.itemsToDisplay = state.visibleItems()
+    self.itemsToDisplay = state.visibleAndSortedItems()
     self.tableView.reloadData()
   }
 
   func filterSelected() {
     guard let listId = self.listId else { return }
-    self.env?.store.dispatch(Action(listId, .setFilter(FilterOptions.all[segmentCtrl.selectedSegmentIndex])))
+    self.env?.store.dispatch(.todoListAction(listId, .setFilter(FilterOptions.all[segmentCtrl.selectedSegmentIndex])))
   }
 
   func completeItem(_ itemId: ListItemId, isCompleted: Bool) {
     guard let listId = self.listId else { return }
-    self.env?.store.dispatch(Action(listId, .markAsCompleted(itemId, isCompleted)))
+    self.env?.store.dispatch(.todoListAction(listId, .markAsCompleted(itemId, isCompleted)))
   }
 
   func deleteItem(_ itemId: ListItemId) {
     guard let listId = self.listId else { return }
-    self.env?.store.dispatch(Action(listId, .removeItem(itemId)))
+    self.env?.store.dispatch(.todoListAction(listId, .removeItem(itemId)))
   }
 
+  func onAddNewItem(name: String) {
+    guard let listId = self.listId else { return }
 
+    let newItem = TodoItem(id: ListItemId(), todoText: name)
+
+    self.env?.store.dispatch(.todoListAction(listId, .addItem(newItem)))
+    self.env?.store.dispatch(.newTodoItemAction(.clearNewItemName))
+  }
+
+  func onItemNameChanged(newName: String) {
+    self.env?.store.dispatch(.newTodoItemAction(.setNewItemName(newName)))
+  }
 }

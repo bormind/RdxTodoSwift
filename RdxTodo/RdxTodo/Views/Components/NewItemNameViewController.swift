@@ -9,19 +9,30 @@ import Foundation
 import StackViews
 import RxSwift
 
-final class NewListNameViewController: UIViewController, RdxViewController {
+protocol AddNewItemDelegate: class {
+  func onAddNewItem(name: String)
+  func onItemNameChanged(newName: String)
+}
+
+final class NewItemNameViewController: UIViewController {
 
   let newListName = UITextField()
   let createListButton = UIButton()
 
-  let disposableBag = DisposeBag()
+  weak var delegate: AddNewItemDelegate?
 
-  var store: Store?
+  var backgroundColor: UIColor? {
+    get { return self.view.backgroundColor }
+    set { self.view.backgroundColor = newValue }
+  }
+
+  var placeholder: String? {
+    get { return self.newListName.placeholder }
+    set { self.newListName.placeholder = newValue }
+  }
 
   init() {
     super.init(nibName: nil, bundle: nil)
-
-    self.view.backgroundColor = UIColor.rgb(218, 226, 242)
 
     self.newListName.placeholder = "New List Name"
 //    self.newListName.layer.borderWidth = 1.0
@@ -48,39 +59,24 @@ final class NewListNameViewController: UIViewController, RdxViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setup(_ env: Environment) {
-    self.store = env.store
+  func updateUI(_ newListState: NewItemState) {
 
-    self.store?.state
-      .map { $0.newListState }
-      .distinctUntilChanged()
-      .subscribe(onNext: { [unowned self] in self.updateUI($0) })
-      .addDisposableTo(disposableBag)
-  }
-
-  private func updateUI(_ newListState: NewListState) {
-
-    self.createListButton.isEnabled = newListState.addListButtonEnabled
+    self.createListButton.isEnabled = newListState.addItemButtonEnabled
     if self.newListName.text != newListState.newName {
       self.newListName.text = newListState.newName
     }
   }
 
   func onAddList() {
-    guard let name = store?.currentState.newListState.newName else {
-      return
-    }
+    guard let newName = self.newListName.text,
+          !newName.isEmpty else  { return }
 
-    let newTodoList = TodoList(name: name)
-    self.store?.dispatch(Action(.addOrUpdateTodoList(newTodoList)))
-    self.store?.dispatch(Action(.clearNewListName))
+    self.delegate?.onAddNewItem(name: newName)
   }
 
   func onNameChanged() {
-    guard let newName = self.newListName.text else {
-      return
-    }
+    guard let newName = self.newListName.text else { return }
 
-    self.store?.dispatch(Action(.setNewListName(newName)))
+    self.delegate?.onItemNameChanged(newName: newName)
   }
 }

@@ -31,8 +31,10 @@ extension TodoListState {
     return self.list.todoItems.index(where: { $0.id == id })
   }
 
-  func visibleItems() -> [TodoItem] {
-    return list.todoItems.filter(isListItemVisible(self.filterOption))
+  func visibleAndSortedItems() -> [TodoItem] {
+    return list.todoItems
+      .filter(isListItemVisible(self.filterOption))
+      .sorted(by: compareListItems)
   }
 }
 
@@ -79,5 +81,13 @@ fileprivate func isListItemVisible(_ filterOption: FilterOptions)
       return !todoItem.isCompleted
     }
   }
+}
+
+fileprivate func compareListItems(_ lhs: TodoItem, _ rhs: TodoItem) -> Bool {
+  if lhs.isCompleted != rhs.isCompleted {
+    return rhs.isCompleted
+  }
+
+  return lhs.todoText.caseInsensitiveCompare(rhs.todoText) == .orderedAscending
 }
 

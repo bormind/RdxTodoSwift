@@ -86,7 +86,7 @@ class ListCollectionSectionHeaderCell: UITableViewCell, RdxViewController {
       return
     }
 
-    self.store?.dispatch(Action(.setListSort(buttonAttr.2)))
+    self.store?.dispatch(.listCollectionAction(.setListSort(buttonAttr.2)))
   }
 
 }

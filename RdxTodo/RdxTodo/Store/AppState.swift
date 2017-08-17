@@ -12,7 +12,8 @@ typealias ListItemId = UUID
 struct AppState {
   var listCollection: ListCollectionState = ListCollectionState()
   var selectedListId: ListId? = nil
-  var newListState = NewListState()
+  var newListState = NewItemState()
+  var newTodoItemState = NewItemState()
 }
 
 extension AppState {
@@ -25,23 +26,8 @@ enum Action {
   case selectList(ListId)
   case listCollectionAction(ListCollectionAction)
   case todoListAction(ListId, TodoListAction)
-  case newListAction(NewListAction)
-}
-
-
-//convenience initialization
-extension Action {
-  init(_ collectionAction: ListCollectionAction) {
-    self = .listCollectionAction(collectionAction)
-  }
-
-  init(_ id: ListId, _ listAction: TodoListAction) {
-    self = .todoListAction(id, listAction)
-  }
-
-  init(_ newListAction: NewListAction) {
-    self = .newListAction(newListAction)
-  }
+  case newListAction(NewItemAction)
+  case newTodoItemAction(NewItemAction)
 }
 
 func reducer(_ state: AppState, action: Action) -> AppState {
@@ -58,7 +44,9 @@ func reducer(_ state: AppState, action: Action) -> AppState {
       state.listCollection.lists[ix] = listReducer(state.listCollection.lists[ix], action: action)
     }
   case .newListAction(let action):
-    state.newListState = newListReducer(state.newListState, action: action)
+    state.newListState = newItemReducer(state.newListState, action: action)
+  case .newTodoItemAction(let action):
+    state.newTodoItemState = newItemReducer(state.newTodoItemState, action: action)
   }
 
   return state

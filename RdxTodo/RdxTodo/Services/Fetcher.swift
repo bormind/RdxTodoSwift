@@ -15,7 +15,7 @@ struct Fetcher {
         .onValue { listsData in
           listsData
             .map { TodoList(id: $0.listId, name: $0.listName, lastModified: $0.lastModified) }
-            .forEach { self.store.dispatch(Action(.addOrUpdateTodoList($0))) }
+            .forEach { self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0))) }
         }
         .onError {  print("Error fetching Lists: \($0)")  }
     }
@@ -24,7 +24,7 @@ struct Fetcher {
   func fetchListDetails(listId: ListId) {
     api.fetchTodoList(listId: listId) { result in
       _ = result
-        .onValue { self.store.dispatch(Action(.addOrUpdateTodoList($0))) }
+        .onValue { self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0))) }
         .onError {  print("Error fetching list details: \($0)")  }
     }
   }

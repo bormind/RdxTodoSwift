@@ -12,14 +12,18 @@ fileprivate let ListCollectionSectionHeaderCellId = "ListCollectionSectionHeader
 fileprivate let TodoListCellId = "TodoListCellId"
 
 
-final class ListCollectionViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,
+final class ListCollectionViewController:
+  UIViewController,
+  UITableViewDataSource,
+  UITableViewDelegate,
+  AddNewItemDelegate,
   RdxViewController {
 
   var env: Environment?
 
   let disposableBag = DisposeBag()
 
-  let newNameVC = NewListNameViewController()
+  let newNameVC = NewItemNameViewController()
 
   let tableView = UITableView()
 
@@ -33,12 +37,17 @@ final class ListCollectionViewController: UIViewController, UITableViewDataSourc
     self.automaticallyAdjustsScrollViewInsets = false
     self.view.backgroundColor = UIColor.white
 
+    self.newNameVC.backgroundColor = UIColor.rgb(218, 226, 242)
+    self.newNameVC.placeholder = "New list name"
+    self.newNameVC.delegate = self
+
     self.tableView.dataSource = self
     self.tableView.delegate = self
 
     self.tableView.register(
       ListCollectionSectionHeaderCell.self,
       forCellReuseIdentifier: ListCollectionSectionHeaderCellId)
+
     self.tableView.register(TodoListCell.self, forCellReuseIdentifier: TodoListCellId)
 
     _ = stackViews(
@@ -66,7 +75,12 @@ final class ListCollectionViewController: UIViewController, UITableViewDataSourc
       .subscribe(onNext: { [unowned self] state in self.updateUI(state) })
       .addDisposableTo(disposableBag)
 
-    newNameVC.setup(env)
+    self.env?.store
+      .state
+      .map { $0.newListState }
+      .distinctUntilChanged()
+      .subscribe(onNext: self.newNameVC.updateUI)
+      .addDisposableTo(disposableBag)
   }
 
   func numberOfSections(in tableView: UITableView) -> Int {
@@ -104,6 +118,16 @@ final class ListCollectionViewController: UIViewController, UITableViewDataSourc
     vc.setup(env)
 
     self.navigationController?.pushViewController(vc, animated: true)
+  }
+
+  func onAddNewItem(name: String) {
+    let newTodoList = TodoList(name: name)
+    self.env?.store.dispatch(.listCollectionAction(.addOrUpdateTodoList(newTodoList)))
+    self.env?.store.dispatch(.newListAction(.clearNewItemName))
+  }
+
+  func onItemNameChanged(newName: String) {
+    self.env?.store.dispatch(.newListAction(.setNewItemName(newName)))
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

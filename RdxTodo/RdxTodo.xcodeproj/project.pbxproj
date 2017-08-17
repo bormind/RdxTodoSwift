@@ -30,12 +30,12 @@
 		D6F985242AE3793AB46231FC /* AddItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F98DEFCC3F5CBDA8E8A71F /* AddItemViewController.swift */; };
 		D6F98550D536EC87E83B89F2 /* FetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9826B443E3753D0EA968F /* FetchResult.swift */; };
 		D6F9857400F21BEAF9AAFBAF /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F98836315C4FAA5E3A32FF /* UILabelExtensions.swift */; };
-		D6F985B51C9B193DE7A80648 /* NewListNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F98A62E4199A5F6B878D2B /* NewListNameViewController.swift */; };
 		D6F98650AAAE33F6972E336B /* TodoItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F98F74D5EECCE95373B735 /* TodoItemCell.swift */; };
 		D6F9874C9EFDEF6FA01D138E /* Fetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9863A7F5551E20A1B9831 /* Fetcher.swift */; };
 		D6F988124C150B973DD754A8 /* unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F984142E9ADC8833F766BE /* unwrap.swift */; };
-		D6F98835C8ED7F0FE7B56A20 /* NewListState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9830B8AC2216E15B87440 /* NewListState.swift */; };
+		D6F98835C8ED7F0FE7B56A20 /* NewItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9830B8AC2216E15B87440 /* NewItemState.swift */; };
 		D6F9886DF2236C7BBC79967A /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F98EB634A057D0861D694B /* Environment.swift */; };
+		D6F98ADA5C917C043D6117E4 /* NewItemNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9890E616EEB29CF56A64E /* NewItemNameViewController.swift */; };
 		D6F98AEA81BE8479E3CF4B74 /* RdxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F989581BE8C9DB6AB42BD1 /* RdxViewController.swift */; };
 		D6F98B34ADDAF9D04F745888 /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F98A6E999D85BCA83291F9 /* UIColorExtensions.swift */; };
 		D6F98BA4201032A2C56DB0E8 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9804E4052CEA254D7801A /* SampleData.swift */; };
@@ -79,7 +79,7 @@
 		D6F980821C1F72BB25C6BE6F /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		D6F9815E42812C20DD5641E9 /* ListCollectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCollectionState.swift; sourceTree = "<group>"; };
 		D6F9826B443E3753D0EA968F /* FetchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchResult.swift; sourceTree = "<group>"; };
-		D6F9830B8AC2216E15B87440 /* NewListState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewListState.swift; sourceTree = "<group>"; };
+		D6F9830B8AC2216E15B87440 /* NewItemState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemState.swift; sourceTree = "<group>"; };
 		D6F9831A599BE9B7CC2DA385 /* ListCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCollectionViewController.swift; sourceTree = "<group>"; };
 		D6F9836E4DA59DF695A2AC54 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		D6F984142E9ADC8833F766BE /* unwrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = unwrap.swift; sourceTree = "<group>"; };
@@ -88,10 +88,10 @@
 		D6F986CFBB999C0D1D96150B /* TodoListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListCell.swift; sourceTree = "<group>"; };
 		D6F987F9D81D579C2DD2C576 /* UIButtonExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIButtonExtensions.swift; sourceTree = "<group>"; };
 		D6F98836315C4FAA5E3A32FF /* UILabelExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UILabelExtensions.swift; sourceTree = "<group>"; };
+		D6F9890E616EEB29CF56A64E /* NewItemNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemNameViewController.swift; sourceTree = "<group>"; };
 		D6F989510299789527F66EA1 /* TodoItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoItem.swift; sourceTree = "<group>"; };
 		D6F989581BE8C9DB6AB42BD1 /* RdxViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RdxViewController.swift; sourceTree = "<group>"; };
 		D6F98A6169307D9C279A3A05 /* ListCollectionSectionHeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCollectionSectionHeaderCell.swift; sourceTree = "<group>"; };
-		D6F98A62E4199A5F6B878D2B /* NewListNameViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewListNameViewController.swift; sourceTree = "<group>"; };
 		D6F98A6E999D85BCA83291F9 /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtensions.swift; sourceTree = "<group>"; };
 		D6F98DEFCC3F5CBDA8E8A71F /* AddItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddItemViewController.swift; sourceTree = "<group>"; };
 		D6F98EB634A057D0861D694B /* Environment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
@@ -163,6 +163,7 @@
 				D6F98A43B45AE7726BAF1A4E /* ListCollection */,
 				D6F986F06ECB1252315D7EF3 /* TodoList */,
 				D6F989581BE8C9DB6AB42BD1 /* RdxViewController.swift */,
+				D6F985D54BF4C6FBAD874B53 /* Components */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -175,7 +176,7 @@
 				AD8C8A9071B7B60E91A6AD22 /* AppState.swift */,
 				D6F9815E42812C20DD5641E9 /* ListCollectionState.swift */,
 				D6F9804E4052CEA254D7801A /* SampleData.swift */,
-				D6F9830B8AC2216E15B87440 /* NewListState.swift */,
+				D6F9830B8AC2216E15B87440 /* NewItemState.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -212,6 +213,14 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		D6F985D54BF4C6FBAD874B53 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D6F9890E616EEB29CF56A64E /* NewItemNameViewController.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		D6F986F06ECB1252315D7EF3 /* TodoList */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,7 +236,6 @@
 			children = (
 				D6F98A6169307D9C279A3A05 /* ListCollectionSectionHeaderCell.swift */,
 				D6F9831A599BE9B7CC2DA385 /* ListCollectionViewController.swift */,
-				D6F98A62E4199A5F6B878D2B /* NewListNameViewController.swift */,
 				7DB1C44F1F2509630013176B /* ListCollectionCellStyles.swift */,
 				D6F986CFBB999C0D1D96150B /* TodoListCell.swift */,
 			);
@@ -341,7 +349,6 @@
 				D6F98ECEB79338DFE332C51B /* Filter.swift in Sources */,
 				D6F98E0D57CFEA0838D05853 /* ListCollectionSectionHeaderCell.swift in Sources */,
 				D6F98483468BD37B98AF8B04 /* ListCollectionViewController.swift in Sources */,
-				D6F985B51C9B193DE7A80648 /* NewListNameViewController.swift in Sources */,
 				7DB1C4501F2509630013176B /* ListCollectionCellStyles.swift in Sources */,
 				D6F98650AAAE33F6972E336B /* TodoItemCell.swift in Sources */,
 				D6F985242AE3793AB46231FC /* AddItemViewController.swift in Sources */,
@@ -351,9 +358,10 @@
 				D6F981BA5BD38E9C66B5A89E /* UIButtonExtensions.swift in Sources */,
 				D6F9857400F21BEAF9AAFBAF /* UILabelExtensions.swift in Sources */,
 				D6F98AEA81BE8479E3CF4B74 /* RdxViewController.swift in Sources */,
-				D6F98835C8ED7F0FE7B56A20 /* NewListState.swift in Sources */,
+				D6F98835C8ED7F0FE7B56A20 /* NewItemState.swift in Sources */,
 				D6F98D28F530DBBAC353D6E2 /* Api.swift in Sources */,
 				D6F9886DF2236C7BBC79967A /* Environment.swift in Sources */,
+				D6F98ADA5C917C043D6117E4 /* NewItemNameViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
