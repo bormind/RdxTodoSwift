@@ -150,4 +150,12 @@ class TodoListViewController:  UIViewController, RdxViewController,
   func onItemNameChanged(newName: String) {
     self.env?.store.dispatch(.newTodoItemAction(.setNewItemName(newName)))
   }
+
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    guard let listId = self.listId,
+          editingStyle == .delete else { return }
+
+    let item = itemsToDisplay[indexPath.row]
+    self.env?.store.dispatch(.todoListAction(listId, .removeItem(item.id)))
+  }
 }

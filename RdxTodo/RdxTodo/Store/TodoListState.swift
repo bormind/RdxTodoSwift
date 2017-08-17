@@ -5,8 +5,6 @@
 
 import Foundation
 
-
-
 struct TodoListState: Equatable {
   var list: TodoList
   var filterOption: FilterOptions

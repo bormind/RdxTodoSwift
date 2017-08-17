@@ -142,4 +142,12 @@ final class ListCollectionViewController:
     self.sortedLists = state.sortedLists()
     self.tableView.reloadData()
   }
+
+  func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    guard editingStyle == .delete else { return }
+
+    let selectedList = self.sortedLists[indexPath.row]
+
+    self.env?.store.dispatch(.listCollectionAction(.removeTodoList(selectedList.id)))
+  }
 }
