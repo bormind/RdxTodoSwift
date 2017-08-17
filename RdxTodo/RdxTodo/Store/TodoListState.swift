@@ -62,6 +62,8 @@ func listReducer(_ state: TodoListState, action: TodoListAction) -> TodoListStat
     state.filterOption = filter
   }
 
+  state.list.lastModified = Date()
+
   return state
 }
 

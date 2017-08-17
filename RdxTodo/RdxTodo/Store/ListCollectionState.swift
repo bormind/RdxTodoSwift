@@ -58,7 +58,10 @@ func listCollectionReducer(_ state: ListCollectionState, action: ListCollectionA
   switch action {
   case .addOrUpdateTodoList(let list):
     if let ix = state.listIndex(list.id) {
-      state.lists[ix] = TodoListState(list: list, filterOption: state.lists[ix].filterOption)
+      let localListState = state.lists[ix]
+      state.lists[ix] = TodoListState(
+        list: consolidateLists(local: localListState.list, remote: list),
+        filterOption: localListState.filterOption)
     }
     else {
       state.lists.append(TodoListState(list: list))
@@ -79,9 +82,15 @@ func listCollectionReducer(_ state: ListCollectionState, action: ListCollectionA
 }
 
 fileprivate func compareDates(_ lhs: TodoListState, _ rhs: TodoListState) -> Bool {
-  return lhs.list.lastModified <= rhs.list.lastModified
+  return lhs.list.lastModified >= rhs.list.lastModified
 }
 
 fileprivate func compareNames(_ lhs: TodoListState, _ rhs: TodoListState) -> Bool {
   return lhs.list.name <= rhs.list.name
+}
+
+//This is for example only in real life consolidation should happen on the server
+//when changes are made and only reflected in the local state in the store
+fileprivate func consolidateLists(local: TodoList, remote: TodoList) -> TodoList {
+  return local.lastModified > remote.lastModified ? local : remote
 }

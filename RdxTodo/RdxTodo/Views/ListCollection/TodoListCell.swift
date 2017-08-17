@@ -27,11 +27,6 @@ class TodoListCell: UITableViewCell {
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-    listNameLabel.backgroundColor = UIColor.blue
-    lastModifiedTimeLabel.backgroundColor = UIColor.green
-
-    self.backgroundColor = UIColor.orange
-
     self.dateFormatter.dateFormat = "MMM d, h:mm a"
 
     [listNameLabel, lastModifiedTimeLabel].enumerated().forEach {
