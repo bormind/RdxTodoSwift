@@ -6,7 +6,7 @@
 import Foundation
 import RxSwift
 
-typealias Reducer = (AppState, Action) -> AppState
+typealias Reducer = (AppState, Action, ChangeId) -> AppState
 
 
 class Store {
@@ -18,11 +18,14 @@ class Store {
   init(reducer: @escaping Reducer) {
     self.reducer = reducer
 
-    self.observableState = Variable(AppState())
+    let changeId = ChangeId()
+    let initialState = AppState(listCollection: ListCollectionState(changeId: changeId), changeId: changeId)
+
+    self.observableState = Variable(initialState)
   }
 
   func dispatch(_ action: Action) {
-    self.observableState.value = self.reducer(self.observableState.value, action)
+    self.observableState.value = self.reducer(self.observableState.value, action, ChangeId())
   }
 
   var state: Observable<AppState> {

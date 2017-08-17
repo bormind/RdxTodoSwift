@@ -5,19 +5,21 @@
 
 import Foundation
 
-struct TodoListState: Equatable {
+struct TodoListState: Equatable, ChangeTracking {
   var list: TodoList
   var filterOption: FilterOptions
+  var changeId: ChangeId
 
-  init(list: TodoList, filterOption: FilterOptions = .showAll) {
+  init(list: TodoList, filterOption: FilterOptions = .showAll, changeId: ChangeId) {
     self.list = list
     self.filterOption = filterOption
+    self.changeId = changeId
   }
 }
 
 func ==(lhs: TodoListState, rhs: TodoListState) -> Bool {
-  return lhs.list == rhs.list
-    && lhs.filterOption == rhs.filterOption
+  return lhs.listId == rhs.listId
+    && lhs.changeId == rhs.changeId
 }
 
 extension TodoListState {
@@ -43,26 +45,28 @@ enum TodoListAction {
   case setFilter(FilterOptions)
 }
 
-func listReducer(_ state: TodoListState, action: TodoListAction) -> TodoListState {
+func listReducer(_ state: TodoListState, action: TodoListAction, changeId: ChangeId) -> TodoListState {
 
   var state = state
+  state.changeId = changeId
 
   switch action {
   case .addItem(let item):
     state.list.todoItems.append(item)
+    state.list.lastModified = Date()
   case .removeItem(let id):
     if let ix = state.listItemIndex(id) {
       state.list.todoItems.remove(at: ix)
+      state.list.lastModified = Date()
     }
   case .markAsCompleted(let id, let isCompleted):
     if let ix = state.listItemIndex(id) {
       state.list.todoItems[ix].isCompleted = isCompleted
+      state.list.lastModified = Date()
     }
   case .setFilter(let filter):
     state.filterOption = filter
   }
-
-  state.list.lastModified = Date()
 
   return state
 }

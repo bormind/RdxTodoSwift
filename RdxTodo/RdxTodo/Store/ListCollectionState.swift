@@ -18,14 +18,18 @@ enum ListsSorting {
   case byLastModified
 }
 
-struct ListCollectionState: Equatable {
+struct ListCollectionState: Equatable, ChangeTracking {
   var sortBy: ListsSorting = .byLastModified
   var lists: [TodoListState] = []
+  var changeId: ChangeId
+
+  init(changeId: ChangeId) {
+    self.changeId = changeId
+  }
 }
 
 func ==(lhs: ListCollectionState, rhs: ListCollectionState) -> Bool {
-  return lhs.sortBy == rhs.sortBy
-    && lhs.lists == rhs.lists
+  return lhs.changeId == rhs.changeId
 }
 
 extension ListCollectionState {
@@ -50,10 +54,11 @@ extension ListCollectionState {
   }
 }
 
-func listCollectionReducer(_ state: ListCollectionState, action: ListCollectionAction)
+func listCollectionReducer(_ state: ListCollectionState, action: ListCollectionAction, changeId: ChangeId)
     -> ListCollectionState {
 
   var state = state
+  state.changeId = changeId
 
   switch action {
   case .addOrUpdateTodoList(let list):
@@ -61,10 +66,11 @@ func listCollectionReducer(_ state: ListCollectionState, action: ListCollectionA
       let localListState = state.lists[ix]
       state.lists[ix] = TodoListState(
         list: consolidateLists(local: localListState.list, remote: list),
-        filterOption: localListState.filterOption)
+        filterOption: localListState.filterOption,
+        changeId: changeId)
     }
     else {
-      state.lists.append(TodoListState(list: list))
+      state.lists.append(TodoListState(list: list, changeId: changeId))
     }
   case .removeTodoList(let id):
     if let ix = state.listIndex(id) {
@@ -74,7 +80,7 @@ func listCollectionReducer(_ state: ListCollectionState, action: ListCollectionA
     state.sortBy = sort
   case .changeList(let id, let action):
     if let ix = state.listIndex(id) {
-      state.lists[ix] = listReducer(state.lists[ix], action: action)
+      state.lists[ix] = listReducer(state.lists[ix], action: action, changeId: changeId)
     }
   }
 

@@ -7,13 +7,27 @@ import Foundation
 
 typealias ListId = UUID
 typealias ListItemId = UUID
+typealias ChangeId = UUID
 
+protocol ChangeTracking {
+  var changeId: ChangeId { get set }
+}
 
-struct AppState {
-  var listCollection: ListCollectionState = ListCollectionState()
+struct AppState: Equatable, ChangeTracking {
+  var listCollection: ListCollectionState
   var selectedListId: ListId? = nil
   var newListState = NewItemState()
   var newTodoItemState = NewItemState()
+  var changeId: ChangeId
+
+  init(listCollection: ListCollectionState, changeId: ChangeId) {
+    self.listCollection = listCollection
+    self.changeId = changeId
+  }
+}
+
+func ==(lhs: AppState, rhs: AppState) -> Bool {
+  return lhs.changeId == rhs.changeId
 }
 
 extension AppState {
@@ -30,18 +44,19 @@ enum Action {
   case newTodoItemAction(NewItemAction)
 }
 
-func reducer(_ state: AppState, action: Action) -> AppState {
+func reducer(_ state: AppState, action: Action, changeId: ChangeId) -> AppState {
 
   var state = state
+  state.changeId = changeId
 
   switch action {
-  case .selectList(let listId):
+   case .selectList(let listId):
     state.selectedListId = listId
   case .listCollectionAction(let listCollectionAction):
-    state.listCollection = listCollectionReducer(state.listCollection, action: listCollectionAction)
+    state.listCollection = listCollectionReducer(state.listCollection, action: listCollectionAction, changeId: changeId)
   case .todoListAction(let listId, let action):
     if let ix = state.listCollection.lists.index(where: { $0.listId == listId }) {
-      state.listCollection.lists[ix] = listReducer(state.listCollection.lists[ix], action: action)
+      state.listCollection.lists[ix] = listReducer(state.listCollection.lists[ix], action: action, changeId: changeId)
     }
   case .newListAction(let action):
     state.newListState = newItemReducer(state.newListState, action: action)
