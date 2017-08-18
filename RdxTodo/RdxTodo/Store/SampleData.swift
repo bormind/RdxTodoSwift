@@ -5,6 +5,7 @@
 
 import Foundation
 
+let BROKEN_LIST_ID = ListId()
 
 let SAMPLE_DATA: [TodoList] = [
   TodoList(id: ListId(), name:"Shopping List", lastModified: Date(), todoItems: [
@@ -76,7 +77,9 @@ let SAMPLE_DATA: [TodoList] = [
     TodoItem(id: ListItemId(), todoText: "Death’s End, by Cixin Liu, translated by Ken Liu"),
     TodoItem(id: ListItemId(), todoText: "A Closed and Common Orbit, by Becky Chambers"),
     TodoItem(id: ListItemId(), todoText: "Too Like the Lightning, by Ada Palmer"),
-  ])
+  ]),
+
+  TodoList(id: BROKEN_LIST_ID, name: "NOT FOUND LIST", lastModified: Date(), todoItems: [])
 ]
 
 

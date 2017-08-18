@@ -59,7 +59,7 @@ final class NewItemNameViewController: UIViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func updateUI(_ newListState: NewItemState) {
+  func updateUI(_ newListState: NewNameState) {
 
     self.createListButton.isEnabled = newListState.addItemButtonEnabled
     if self.newListName.text != newListState.newName {

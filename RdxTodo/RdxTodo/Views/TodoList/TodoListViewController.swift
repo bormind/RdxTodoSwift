@@ -37,7 +37,7 @@ class TodoListViewController:  UIViewController, RdxViewController,
 
   let tableView = UITableView()
 
-  var listId: ListId?
+  var selectedList: TodoListState?
   var itemsToDisplay: [TodoItem] = []
 
   init() {
@@ -76,7 +76,8 @@ class TodoListViewController:  UIViewController, RdxViewController,
 
     self.env?.store
       .state
-      .map { $0.newTodoItemState }
+      .map { $0.newTodoItemNameState
+      }
       .subscribe(onNext: self.newItemNameVC.updateUI)
       .addDisposableTo(disposableBag)
   }
@@ -103,10 +104,31 @@ class TodoListViewController:  UIViewController, RdxViewController,
   }
 
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return itemsToDisplay.count
+    guard let selectedList = self.selectedList else { return 0 }
+
+    if selectedList.isFetchingListData || selectedList.fetchingError != nil {
+      return 1
+    }
+    else {
+      return itemsToDisplay.count
+    }
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    guard let selectedList = self.selectedList else { return UITableViewCell() }
+
+    if selectedList.isFetchingListData {
+      let cell = UITableViewCell()
+      cell.textLabel?.text = "Fetching list data..."
+      return cell
+    }
+
+    if let error = selectedList.fetchingError {
+      let cell = UITableViewCell()
+      cell.textLabel?.text = error
+      return cell
+    }
+
     let cell = tableView.dequeueReusableCell(withIdentifier: TodoItemCellId, for: indexPath) as! TodoItemCell
     cell.delegate = self
     cell.selectionStyle = .none
@@ -115,31 +137,32 @@ class TodoListViewController:  UIViewController, RdxViewController,
   }
 
   private func updateUI(_ state: TodoListState) {
+    self.selectedList = state
+
     segmentCtrl.selectedSegmentIndex = FilterOptions.all.index(of: state.filterOption) ?? 0
 
     self.title = state.list.name
-    self.listId = state.listId
     self.itemsToDisplay = state.visibleAndSortedItems()
     self.tableView.reloadData()
   }
 
   func filterSelected() {
-    guard let listId = self.listId else { return }
+    guard let listId = self.selectedList?.listId else { return }
     self.env?.store.dispatch(.todoListAction(listId, .setFilter(FilterOptions.all[segmentCtrl.selectedSegmentIndex])))
   }
 
   func completeItem(_ itemId: ListItemId, isCompleted: Bool) {
-    guard let listId = self.listId else { return }
+    guard let listId = self.selectedList?.listId else { return }
     self.env?.store.dispatch(.todoListAction(listId, .markAsCompleted(itemId, isCompleted)))
   }
 
   func deleteItem(_ itemId: ListItemId) {
-    guard let listId = self.listId else { return }
+    guard let listId = self.selectedList?.listId else { return }
     self.env?.store.dispatch(.todoListAction(listId, .removeItem(itemId)))
   }
 
   func onAddNewItem(name: String) {
-    guard let listId = self.listId else { return }
+    guard let listId = self.selectedList?.listId else { return }
 
     let newItem = TodoItem(id: ListItemId(), todoText: name)
 
@@ -152,7 +175,7 @@ class TodoListViewController:  UIViewController, RdxViewController,
   }
 
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-    guard let listId = self.listId,
+    guard let listId = self.selectedList?.listId,
           editingStyle == .delete else { return }
 
     let item = itemsToDisplay[indexPath.row]

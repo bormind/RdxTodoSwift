@@ -9,6 +9,8 @@ struct TodoListState: Equatable, ChangeTracking {
   var list: TodoList
   var filterOption: FilterOptions
   var changeId: ChangeId
+  var isFetchingListData = false
+  var fetchingError: String? = nil
 
   init(list: TodoList, filterOption: FilterOptions = .showAll, changeId: ChangeId) {
     self.list = list
@@ -36,6 +38,10 @@ extension TodoListState {
       .filter(isListItemVisible(self.filterOption))
       .sorted(by: compareListItems)
   }
+
+  var needsRefreshing: Bool {
+    return self.list.todoItems.isEmpty
+  }
 }
 
 enum TodoListAction {
@@ -43,6 +49,8 @@ enum TodoListAction {
   case removeItem(ListItemId)
   case markAsCompleted(ListItemId, Bool)
   case setFilter(FilterOptions)
+  case setIsFetching(Bool)
+  case setFetchingError(String?)
 }
 
 func listReducer(_ state: TodoListState, action: TodoListAction, changeId: ChangeId) -> TodoListState {
@@ -66,6 +74,10 @@ func listReducer(_ state: TodoListState, action: TodoListAction, changeId: Chang
     }
   case .setFilter(let filter):
     state.filterOption = filter
+  case .setIsFetching(let isFetching):
+    state.isFetchingListData = isFetching
+  case .setFetchingError(let fetchingError):
+    state.fetchingError = fetchingError
   }
 
   return state

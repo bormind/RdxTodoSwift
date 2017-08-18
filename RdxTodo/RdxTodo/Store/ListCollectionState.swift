@@ -34,7 +34,7 @@ func ==(lhs: ListCollectionState, rhs: ListCollectionState) -> Bool {
 
 extension ListCollectionState {
 
-  func sortedLists() -> [TodoList] {
+  func sortedLists() -> [TodoListState] {
 
     let compare: (TodoListState, TodoListState) -> Bool
     switch self.sortBy {
@@ -42,7 +42,7 @@ extension ListCollectionState {
       case .byLastModified: compare = compareDates
     }
 
-    return self.lists.sorted(by: compare).map { $0.list }
+    return self.lists.sorted(by: compare)
   }
 
   func listIndex(_ listId: ListId) -> Int? {
@@ -52,6 +52,7 @@ extension ListCollectionState {
   func getList(withId: ListId) -> TodoListState? {
     return lists.first(where: { $0.listId == withId })
   }
+
 }
 
 func listCollectionReducer(_ state: ListCollectionState, action: ListCollectionAction, changeId: ChangeId)

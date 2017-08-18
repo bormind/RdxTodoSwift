@@ -33,7 +33,7 @@
 		D6F98650AAAE33F6972E336B /* TodoItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F98F74D5EECCE95373B735 /* TodoItemCell.swift */; };
 		D6F9874C9EFDEF6FA01D138E /* Fetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9863A7F5551E20A1B9831 /* Fetcher.swift */; };
 		D6F988124C150B973DD754A8 /* unwrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F984142E9ADC8833F766BE /* unwrap.swift */; };
-		D6F98835C8ED7F0FE7B56A20 /* NewItemState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9830B8AC2216E15B87440 /* NewItemState.swift */; };
+		D6F98835C8ED7F0FE7B56A20 /* NewNameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9830B8AC2216E15B87440 /* NewNameState.swift */; };
 		D6F9886DF2236C7BBC79967A /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F98EB634A057D0861D694B /* Environment.swift */; };
 		D6F98ADA5C917C043D6117E4 /* NewItemNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F9890E616EEB29CF56A64E /* NewItemNameViewController.swift */; };
 		D6F98AEA81BE8479E3CF4B74 /* RdxViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F989581BE8C9DB6AB42BD1 /* RdxViewController.swift */; };
@@ -79,7 +79,7 @@
 		D6F980821C1F72BB25C6BE6F /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		D6F9815E42812C20DD5641E9 /* ListCollectionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCollectionState.swift; sourceTree = "<group>"; };
 		D6F9826B443E3753D0EA968F /* FetchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchResult.swift; sourceTree = "<group>"; };
-		D6F9830B8AC2216E15B87440 /* NewItemState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewItemState.swift; sourceTree = "<group>"; };
+		D6F9830B8AC2216E15B87440 /* NewNameState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewNameState.swift; sourceTree = "<group>"; };
 		D6F9831A599BE9B7CC2DA385 /* ListCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListCollectionViewController.swift; sourceTree = "<group>"; };
 		D6F9836E4DA59DF695A2AC54 /* Filter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filter.swift; sourceTree = "<group>"; };
 		D6F984142E9ADC8833F766BE /* unwrap.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = unwrap.swift; sourceTree = "<group>"; };
@@ -176,7 +176,7 @@
 				AD8C8A9071B7B60E91A6AD22 /* AppState.swift */,
 				D6F9815E42812C20DD5641E9 /* ListCollectionState.swift */,
 				D6F9804E4052CEA254D7801A /* SampleData.swift */,
-				D6F9830B8AC2216E15B87440 /* NewItemState.swift */,
+				D6F9830B8AC2216E15B87440 /* NewNameState.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -358,7 +358,7 @@
 				D6F981BA5BD38E9C66B5A89E /* UIButtonExtensions.swift in Sources */,
 				D6F9857400F21BEAF9AAFBAF /* UILabelExtensions.swift in Sources */,
 				D6F98AEA81BE8479E3CF4B74 /* RdxViewController.swift in Sources */,
-				D6F98835C8ED7F0FE7B56A20 /* NewItemState.swift in Sources */,
+				D6F98835C8ED7F0FE7B56A20 /* NewNameState.swift in Sources */,
 				D6F98D28F530DBBAC353D6E2 /* Api.swift in Sources */,
 				D6F9886DF2236C7BBC79967A /* Environment.swift in Sources */,
 				D6F98ADA5C917C043D6117E4 /* NewItemNameViewController.swift in Sources */,

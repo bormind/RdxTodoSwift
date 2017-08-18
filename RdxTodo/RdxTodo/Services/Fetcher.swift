@@ -22,10 +22,14 @@ struct Fetcher {
   }
 
   func fetchListDetails(listId: ListId) {
+    self.store.dispatch(.todoListAction(listId, .setIsFetching(true)))
+
     api.fetchTodoList(listId: listId) { result in
+      self.store.dispatch(.todoListAction(listId, .setIsFetching(false)))
+
       _ = result
         .onValue { self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0))) }
-        .onError {  print("Error fetching list details: \($0)")  }
+        .onError {  self.store.dispatch(.todoListAction(listId, .setFetchingError($0)))  }
     }
   }
 }

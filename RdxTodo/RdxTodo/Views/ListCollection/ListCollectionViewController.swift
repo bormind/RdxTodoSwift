@@ -27,7 +27,7 @@ final class ListCollectionViewController:
 
   let tableView = UITableView()
 
-  var sortedLists: [TodoList] = []
+  var sortedLists: [TodoListState] = []
 
   init() {
     super.init(nibName: nil, bundle: nil)
@@ -77,7 +77,8 @@ final class ListCollectionViewController:
 
     self.env?.store
       .state
-      .map { $0.newListState }
+      .map { $0.newListNameState
+      }
       .distinctUntilChanged()
       .subscribe(onNext: self.newNameVC.updateUI)
       .addDisposableTo(disposableBag)
@@ -111,8 +112,10 @@ final class ListCollectionViewController:
     guard let env = self.env else { return }
 
     let selectedList = self.sortedLists[indexPath.row]
-    env.store.dispatch(.selectList(selectedList.id))
-    env.fetcher.fetchListDetails(listId: selectedList.id)
+    env.store.dispatch(.selectList(selectedList.listId))
+    if selectedList.needsRefreshing {
+      env.fetcher.fetchListDetails(listId: selectedList.listId)
+    }
 
     let vc = TodoListViewController()
     vc.setup(env)
@@ -123,18 +126,18 @@ final class ListCollectionViewController:
   func onAddNewItem(name: String) {
     let newTodoList = TodoList(name: name)
     self.env?.store.dispatch(.listCollectionAction(.addOrUpdateTodoList(newTodoList)))
-    self.env?.store.dispatch(.newListAction(.clearNewItemName))
+    self.env?.store.dispatch(.newListNameAction(.clearNewItemName))
   }
 
   func onItemNameChanged(newName: String) {
-    self.env?.store.dispatch(.newListAction(.setNewItemName(newName)))
+    self.env?.store.dispatch(.newListNameAction(.setNewItemName(newName)))
   }
 
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: TodoListCellId, for: indexPath) as! TodoListCell
     cell.accessoryType = .disclosureIndicator
     cell.selectionStyle = .none
-    cell.todoList = self.sortedLists[indexPath.row]
+    cell.todoList = self.sortedLists[indexPath.row].list
     return cell
   }
 
@@ -148,6 +151,6 @@ final class ListCollectionViewController:
 
     let selectedList = self.sortedLists[indexPath.row]
 
-    self.env?.store.dispatch(.listCollectionAction(.removeTodoList(selectedList.id)))
+    self.env?.store.dispatch(.listCollectionAction(.removeTodoList(selectedList.listId)))
   }
 }

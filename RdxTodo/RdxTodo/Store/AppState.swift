@@ -16,8 +16,8 @@ protocol ChangeTracking {
 struct AppState: Equatable, ChangeTracking {
   var listCollection: ListCollectionState
   var selectedListId: ListId? = nil
-  var newListState = NewItemState()
-  var newTodoItemState = NewItemState()
+  var newListNameState = NewNameState()
+  var newTodoItemNameState = NewNameState()
   var changeId: ChangeId
 
   init(listCollection: ListCollectionState, changeId: ChangeId) {
@@ -40,7 +40,7 @@ enum Action {
   case selectList(ListId)
   case listCollectionAction(ListCollectionAction)
   case todoListAction(ListId, TodoListAction)
-  case newListAction(NewItemAction)
+  case newListNameAction(NewItemAction)
   case newTodoItemAction(NewItemAction)
 }
 
@@ -58,10 +58,10 @@ func reducer(_ state: AppState, action: Action, changeId: ChangeId) -> AppState 
     if let ix = state.listCollection.lists.index(where: { $0.listId == listId }) {
       state.listCollection.lists[ix] = listReducer(state.listCollection.lists[ix], action: action, changeId: changeId)
     }
-  case .newListAction(let action):
-    state.newListState = newItemReducer(state.newListState, action: action)
+  case .newListNameAction(let action):
+    state.newListNameState = newNameReducer(state.newListNameState, action: action)
   case .newTodoItemAction(let action):
-    state.newTodoItemState = newItemReducer(state.newTodoItemState, action: action)
+    state.newTodoItemNameState = newNameReducer(state.newTodoItemNameState, action: action)
   }
 
   return state

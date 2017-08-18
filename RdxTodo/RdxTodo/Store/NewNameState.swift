@@ -10,21 +10,21 @@ enum NewItemAction {
   case setNewItemName(String)
 }
 
-struct NewItemState: Equatable {
+struct NewNameState: Equatable {
   var newName: String? = nil
   var addItemButtonEnabled: Bool = false
 }
 
-func ==(lhs: NewItemState, rhs: NewItemState) -> Bool {
+func ==(lhs: NewNameState, rhs: NewNameState) -> Bool {
   return lhs.newName == rhs.newName
     && lhs.addItemButtonEnabled == rhs.addItemButtonEnabled
 }
 
-fileprivate func isAddItemButtonEnabled(_ state: NewItemState) -> Bool {
+fileprivate func isAddItemButtonEnabled(_ state: NewNameState) -> Bool {
   return !(state.newName ?? "").isEmpty
 }
 
-func newItemReducer(_ state: NewItemState, action: NewItemAction) -> NewItemState {
+func newNameReducer(_ state: NewNameState, action: NewItemAction) -> NewNameState {
   var state = state
 
   switch action {
