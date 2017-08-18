@@ -77,8 +77,7 @@ final class ListCollectionViewController:
 
     self.env?.store
       .state
-      .map { $0.newListNameState
-      }
+      .map { $0.newListNameState }
       .distinctUntilChanged()
       .subscribe(onNext: self.newNameVC.updateUI)
       .addDisposableTo(disposableBag)

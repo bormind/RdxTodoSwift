@@ -42,7 +42,7 @@ struct Api {
   func fetchTodoList(listId: ListId, completed: @escaping (FetchResult<TodoList>)->()) {
     //simulate async network call
     DispatchQueue.global(qos: .userInitiated).async {
-      Thread.sleep(forTimeInterval: 4)
+      Thread.sleep(forTimeInterval: 2)
       completed(fetchList(listId: listId))
     }
   }
