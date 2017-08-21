@@ -9,7 +9,6 @@ import StackViews
 
 class TodoListCell: UITableViewCell {
 
-
   let listNameLabel = UILabel()
   let lastModifiedTimeLabel = UILabel()
   let dateFormatter = DateFormatter()

@@ -4,46 +4,60 @@
 //
 
 import Foundation
+import RxSwift
+
+struct FetchError : Error, CustomStringConvertible {
+  let message: String
+
+  init(_ message: String) {
+    self.message = message
+  }
+
+  public var description: String {
+    return message
+  }
+}
 
 //We pretend that we get shallow list data from the API call
 typealias ShallowListData = (listId: ListId, listName: String, lastModified: Date)
 
-private func fetchShallowListData() -> FetchResult<[ShallowListData]> {
-  let data = SAMPLE_DATA.map { ($0.id, $0.name, $0.lastModified) }
-  return .value(data)
-}
-
-private func fetchList(listId: ListId) -> FetchResult<TodoList> {
-  // To simulate scenario where something went wrong on the server
-  if listId == BROKEN_LIST_ID {
-    return .error("List data not found!")
-  }
-
-  let result: FetchResult<TodoList>
-  if let list = SAMPLE_DATA.first(where: { $0.id == listId } ) {
-    result = .value(list)
-  }
-  else {
-    result = .error("List with id: \(listId) not found!")
-  }
-
-  return result
-}
-
 struct Api {
-  func fetchLists(completed: @escaping (FetchResult<[ShallowListData]>)->()) {
-    //simulate async network call
-    DispatchQueue.global(qos: .userInitiated).async {
-      Thread.sleep(forTimeInterval: 0.5)
-      completed(fetchShallowListData())
+  func fetchLists() -> Observable<[ShallowListData]> {
+    return Observable.create { observer in
+      //simulate async network call
+      DispatchQueue.global(qos: .userInitiated).async {
+        Thread.sleep(forTimeInterval: 0.5)
+
+        let data = SAMPLE_DATA.map { ($0.id, $0.name, $0.lastModified) }
+        observer.on(.next(data))
+        observer.on(.completed)
+      }
+
+      return Disposables.create()
     }
+
   }
 
-  func fetchTodoList(listId: ListId, completed: @escaping (FetchResult<TodoList>)->()) {
-    //simulate async network call
-    DispatchQueue.global(qos: .userInitiated).async {
-      Thread.sleep(forTimeInterval: 2)
-      completed(fetchList(listId: listId))
+  func fetchTodoList(listId: ListId) -> Observable<TodoList> {
+    return Observable.create { observer in
+      //simulate async network call
+      DispatchQueue.global(qos: .userInitiated).async {
+        Thread.sleep(forTimeInterval: 2)
+
+        if listId == BROKEN_LIST_ID {
+          observer.on(.error(FetchError("List data not found!")))
+        }
+
+        guard let list = SAMPLE_DATA.first(where: { $0.id == listId } ) else {
+          observer.on(.error(FetchError("List with id: \(listId) not found!")))
+          return
+        }
+
+        observer.on(.next(list))
+        observer.on(.completed)
+      }
+
+      return Disposables.create()
     }
   }
 }

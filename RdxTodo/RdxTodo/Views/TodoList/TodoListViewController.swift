@@ -70,7 +70,7 @@ class TodoListViewController:  UIViewController, RdxViewController,
       .state
       .map {  $0.selectedList  }
       .unwrap()
-      .distinctUntilChanged()
+//      .distinctUntilChanged()
       .subscribe(onNext: { [unowned self] data in self.updateUI(data) })
       .addDisposableTo(disposableBag)
 

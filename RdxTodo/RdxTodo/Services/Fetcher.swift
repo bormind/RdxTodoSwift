@@ -4,32 +4,34 @@
 //
 
 import Foundation
+import RxSwift
 
 struct Fetcher {
   let api: Api
   let store: Store
 
   func fetchLists() {
-    api.fetchLists { result in
-      _ = result
-        .onValue { listsData in
-          listsData
-            .map { TodoList(id: $0.listId, name: $0.listName, lastModified: $0.lastModified) }
-            .forEach { self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0))) }
-        }
-        .onError {  print("Error fetching Lists: \($0)")  }
-    }
+    _ = api.fetchLists()
+      .subscribe(onNext: { listsData in
+        listsData
+          .map { TodoList(id: $0.listId, name: $0.listName, lastModified: $0.lastModified) }
+          .forEach { self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0))) }
+        },
+        onError: { print("Error fetching Lists: \($0)") }
+      )
+
   }
 
   func fetchListDetails(listId: ListId) {
     self.store.dispatch(.todoListAction(listId, .setIsFetching(true)))
 
-    api.fetchTodoList(listId: listId) { result in
-      self.store.dispatch(.todoListAction(listId, .setIsFetching(false)))
+    _ = api.fetchTodoList(listId: listId)
+      .subscribe(
+        onNext: { self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0))) },
+        onError: {
+          self.store.dispatch(.todoListAction(listId, .setFetchingError("\($0)")))
+        }
+      )
 
-      _ = result
-        .onValue { self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0))) }
-        .onError {  self.store.dispatch(.todoListAction(listId, .setFetchingError($0)))  }
-    }
   }
 }
