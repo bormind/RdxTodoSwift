@@ -25,10 +25,7 @@ class Store {
   }
 
   func dispatch(_ action: Action) {
-    print("Action: \(action)")
-    print("Before: \(self.currentState)")
     self.observableState.value = self.reducer(self.observableState.value, action, ChangeId())
-    print("After: \(self.currentState)")
   }
 
   var state: Observable<AppState> {
