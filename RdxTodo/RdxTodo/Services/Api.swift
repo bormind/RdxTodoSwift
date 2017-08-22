@@ -46,6 +46,7 @@ struct Api {
 
         if listId == BROKEN_LIST_ID {
           observer.on(.error(FetchError("List data not found!")))
+          return
         }
 
         guard let list = SAMPLE_DATA.first(where: { $0.id == listId } ) else {

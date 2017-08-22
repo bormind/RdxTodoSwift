@@ -27,8 +27,12 @@ struct Fetcher {
 
     _ = api.fetchTodoList(listId: listId)
       .subscribe(
-        onNext: { self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0))) },
+        onNext: {
+          self.store.dispatch(.todoListAction(listId, .setIsFetching(false)))
+          self.store.dispatch(.listCollectionAction(.addOrUpdateTodoList($0)))
+        },
         onError: {
+          self.store.dispatch(.todoListAction(listId, .setIsFetching(false)))
           self.store.dispatch(.todoListAction(listId, .setFetchingError("\($0)")))
         }
       )
