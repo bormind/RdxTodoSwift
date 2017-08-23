@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import RxSwift
 
 typealias ListId = UUID
 typealias ListItemId = UUID
@@ -33,6 +34,13 @@ func ==(lhs: AppState, rhs: AppState) -> Bool {
 extension AppState {
   var selectedList: TodoListState? {
     return self.selectedListId.flatMap { self.listCollection.getList(withId: $0) }
+  }
+}
+
+
+extension ObservableType where E == AppState {
+  func mapChange<R: Equatable> (_ transform: @escaping (E) -> R) -> Observable<R> {
+    return self.map(transform).distinctUntilChanged()
   }
 }
 
