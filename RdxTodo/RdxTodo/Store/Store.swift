@@ -6,51 +6,37 @@
 import Foundation
 import RxSwift
 
-typealias Reducer = (State, Action) -> State
+typealias Reducer = (AppState, Action, ChangeId) -> AppState
 
-private func tempTodos() -> [TodoItem] {
-    return ["ASD", "ddfgdg", "err"].enumerated().map { TodoItem(id: $0, todoText: $1) }
-}
-
-
-typealias ID = UUID
 
 class Store {
 
-    let reducer: Reducer
+  let reducer: Reducer
 
-    private let observableState: Variable<State>
+  private let observableState: Variable<AppState>
 
-    let stateChanges: Observable<(State, State)>
+  init(reducer: @escaping Reducer) {
+    self.reducer = reducer
 
-    init(reducer: @escaping Reducer) {
-        self.reducer = reducer
+    let changeId = ChangeId()
+    let initialState = AppState(listCollection: ListCollectionState(changeId: changeId), changeId: changeId)
 
-        self.observableState = Variable(State())
-        self.stateChanges = self.observableState
-                                .asObservable()
-                                .pairWithPrevious()
-                                .observeOn(MainScheduler.instance)
-                                .shareReplay(1)
-    }
+    self.observableState = Variable(initialState)
+  }
 
-    func dispatch(action: Action) {
-        self.observableState.value = self.reducer(self.state, action)
-    }
+  func dispatch(_ action: Action) {
+    self.observableState.value = self.reducer(self.observableState.value, action, ChangeId())
+  }
 
-    var state: State {
-        return observableState.value
-    }
-    
-    func changedSubstate<Substate>(
-            _ getSubstate: @escaping (State)-> Substate,
-            _ isChanged: @escaping (Substate, Substate)->Bool) -> Observable<Substate>  {
+  var state: Observable<AppState> {
+    return observableState
+      .asObservable()
+      .observeOn(MainScheduler.instance)
+  }
 
-        return stateChanges
-                .map { (getSubstate($0.0), getSubstate($0.1)) }
-                .filter(isChanged)
-                .map { $0.1 }
-    }
+  var currentState: AppState {
+    return observableState.value
+  }
+
 }
 
-let gStore = Store(reducer: reducer)
